@@ -1,7 +1,55 @@
 <!doctype html>
 <html amp>
   <head>
-    <script src="https://cdn.ampproject.org/v0.js" ></script>
+    <script>
+      setTimeout(() => {
+        const styleSheets = document.styleSheets;
+        if (!styleSheets) {
+          return;
+        }
+        // Find all stylesheets that aren't loaded from the AMP CDN (those are
+        // critical if they are present).
+        const styleLinkElements = document.querySelectorAll('link[rel~="stylesheet"]');
+        // Compare external sheets against elements of document.styleSheets.
+        // They do not appear in this list until they have been loaded.
+        const timedoutStyleSheets = [];
+        for (let i = 0; i < styleLinkElements.length; i++) {
+          const link = styleLinkElements[i];
+          let found = false;
+          for (let n = 0; n < styleSheets.length; n++) {
+            if (styleSheets[n].ownerNode == link) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            timedoutStyleSheets.push(link);
+          }
+        }
+
+        for (let i = 0; i < timedoutStyleSheets.length; i++) {
+          const existingLink = timedoutStyleSheets[i];
+          const newLink = existingLink.cloneNode(/* not deep */ false);
+          // To avoid blocking the render, we assign a non-matching media
+          // attribute first…
+          const media = existingLink.media || 'all';
+          newLink.media = 'not-matching';
+          // And then switch it back to the original after the stylesheet
+          // loaded.
+          newLink.onload = () => {
+            newLink.media = media;
+          };
+          const parent = existingLink.parentElement;
+          // Insert the stylesheet. We do it right before the existing one,
+          // so that
+          // - we pick up its HTTP request.
+          // - CSS evaluation order doesn't change.
+          parent.insertBefore(newLink, existingLink);
+          // And remove the blocking stylesheet.
+          parent.removeChild(existingLink);
+        }
+      }, 10);
+    </script>
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
