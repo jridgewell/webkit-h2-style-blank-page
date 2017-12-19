@@ -1,8 +1,6 @@
 1. Clone
-2. edit `/etc/hosts`
-  1. Add `127.0.0.1       nypost.com`. This is to get aroudn typekit's referer domain restriction.
-3. `node index.js`
-4. http://nypost.com:3000
+2. `node index.js`
+3. http://localhost:3000
 
 
-Interation between v0.js (AMP, h2 server) and Typekit's fonts (h2 server) causes blank page.
+Interation between `@import url()` in `style.css` (the imported file takes 200 ms to resolve), and AMP (v0.js) causes blank page.
