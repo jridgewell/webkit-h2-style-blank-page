@@ -3,12 +3,8 @@
   <head>
     <script>
       setTimeout(() => {
-        const stylesheets = document.querySelectorAll('link[rel~="stylesheet"]');
-        for (let i = 0; i < stylesheets.length; i++) {
-          const existingLink = stylesheets[i];
-          const newLink = existingLink.cloneNode(/* not deep */ false);
-          existingLink.parentNode.replaceChild(newLink, existingLink);
-        }
+        const stylesheet = document.querySelector('link[rel~="stylesheet"]');
+        stylesheet.parentNode.removeChild(stylesheet);
       }, 10);
     </script>
     <link rel="stylesheet" href="/style.css">
