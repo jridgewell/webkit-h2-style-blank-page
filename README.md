@@ -3,4 +3,4 @@
 3. http://localhost:3000
 
 
-Interation between `@import url()` in `style.css` (the imported file takes 200 ms to resolve), and AMP (v0.js) causes blank page.
+Interation between `@import url()` in `style.css` (the imported file takes 200 ms to resolve) and removing the `<link>` to `style.css` before the 200ms causes permanent blank page.
